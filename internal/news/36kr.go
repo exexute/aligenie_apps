@@ -57,7 +57,7 @@ func GetNews(c *gin.Context) {
 	if err, res := get815(); err != nil {
 		c.JSON(http.StatusOK, &model.SkillRes{
 			ReturnCode: "0",
-			ReturnValue: &model.EndSessionReturnValue{
+			ReturnValue: &model.ReturnValue{
 				Reply:              err.Error(),
 				ResultType:         "RESULT",
 				ExecuteCode:        "SUCCESS",
@@ -70,7 +70,7 @@ func GetNews(c *gin.Context) {
 		msg = strings.Replace(msg, "8点1氪丨", "以下内容来自\"8点1氪\"", -1)
 		c.JSON(http.StatusOK, &model.SkillRes{
 			ReturnCode: "0",
-			ReturnValue: &model.EndSessionReturnValue{
+			ReturnValue: &model.ReturnValue{
 				Reply:              msg,
 				ResultType:         "RESULT",
 				ExecuteCode:        "SUCCESS",
