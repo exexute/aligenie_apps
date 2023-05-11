@@ -58,23 +58,29 @@ func GetNews(c *gin.Context) {
 		c.JSON(http.StatusOK, &model.SkillRes{
 			ReturnCode: "0",
 			ReturnValue: &model.ReturnValue{
-				Reply:              err.Error(),
-				ResultType:         "RESULT",
-				ExecuteCode:        "SUCCESS",
-				SkillDialogSession: &model.SkillDialogSession{SkillEndNluSession: true},
+				Reply:       err.Error(),
+				ResultType:  "RESULT",
+				ExecuteCode: "EXECUTE_ERROR",
 			},
 		})
 	} else {
 		// 8点1氪丨
 		msg := res.Data.ItemList[0].TemplateMaterial.WidgetTitle
 		msg = strings.Replace(msg, "8点1氪丨", "以下内容来自\"8点1氪\"", -1)
+		//c.JSON(http.StatusOK, &model.SkillRes{
+		//	ReturnCode: "0",
+		//	ReturnValue: &model.ReturnValue{
+		//		Reply:       msg,
+		//		ResultType:  "RESULT",
+		//		ExecuteCode: "SUCCESS",
+		//	},
+		//})
 		c.JSON(http.StatusOK, &model.SkillRes{
 			ReturnCode: "0",
 			ReturnValue: &model.ReturnValue{
-				Reply:              msg,
-				ResultType:         "RESULT",
-				ExecuteCode:        "SUCCESS",
-				SkillDialogSession: &model.SkillDialogSession{SkillEndNluSession: true},
+				Reply:       "好的，自由对话已开启，主人想说点什么呢？",
+				ResultType:  "CONFIRM",
+				ExecuteCode: "SUCCESS",
 			},
 		})
 	}

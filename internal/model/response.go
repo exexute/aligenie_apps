@@ -8,10 +8,11 @@ type SkillRes struct {
 }
 
 type ReturnValue struct {
-	Reply              string              `json:"reply"`       // 回复给用户的 TTS 文本信息
-	ResultType         string              `json:"resultType"`  // 回复时的状态标识，RESULT: 天猫精灵播放完回复内容后不会开麦、ASK_INF: 引导继续对话/参数追问响应(播放完后开麦)、CONFIRM: 重要信息再次确认响应
-	ExecuteCode        string              `json:"executeCode"` // SUCCESS: 代表执行成功、PARAMS_ERROR: 代表接收到的请求参数出错、EXECUTE_ERROR: 代表自身代码有异常、REPLY_ERROR: 代表回复结果生成出错
-	Actions            []*Action           `json:"actions,omitempty"`
+	ResultType         string              `json:"resultType"`                   // 回复时的状态标识，RESULT: 天猫精灵播放完回复内容后不会开麦、ASK_INF: 引导继续对话/参数追问响应(播放完后开麦)、CONFIRM: 重要信息再次确认响应
+	ExecuteCode        string              `json:"executeCode"`                  // SUCCESS: 代表执行成功、PARAMS_ERROR: 代表接收到的请求参数出错、EXECUTE_ERROR: 代表自身代码有异常、REPLY_ERROR: 代表回复结果生成出错
+	Reply              string              `json:"reply"`                        // 回复给用户的 TTS 文本信息
+	ReplyType          string              `json:"replyType"`                    // reply的类型，默认为 TEXT。TEXT: 、SSML: 格式参考 https://help.aliyun.com/document_detail/101645.html
+	Actions            []*Action           `json:"actions,omitempty"`            //
 	SkillDialogSession *SkillDialogSession `json:"skillDialogSession,omitempty"` // 对话结束响应，技能的对话 session 控制
 	AskedInfos         []*AskedInfo        `json:"askedInfos,omitempty"`         // 参数追问响应
 	ConfirmParaInfo    *ConfirmParaInfo    `json:"confirmParaInfo,omitempty"`    // 配置 confirm 模型优先匹配内容的参数名称，用户的回答优先匹配此处定义的参数取值。
@@ -35,8 +36,8 @@ type ConfirmParaInfo struct {
 }
 
 type Action struct {
-	Name       string            `json:"name"`
-	Properties map[string]string `json:"properties"`
+	Name       string            `json:"name"`       // Action名称，播放TTS文本内容时该名字必须设置为 playTts
+	Properties map[string]string `json:"properties"` // key: "content"，value为需要播报的SSML语法格式的文本内容；key: "format"，value为 ssml；key: "showText"，value为天猫精灵APP内设备对话记录展示的内容，这里不需要SSML标签
 }
 
 type SelectParaInfo struct {
@@ -53,10 +54,8 @@ type SelectCandidate struct {
 }
 
 type GwCommand struct {
-	CommandDomain string `json:"commandDomain"`
-	CommandName   string `json:"commandName"`
-	Payload       struct {
-		NeedLight bool `json:"needLight"`
-		NeedVoice bool `json:"needVoice"`
-	} `json:"payload"`
+	CommandDomain string            `json:"commandDomain"`    // 指令的命名空间，如：AliGenie.Speaker
+	CommandName   string            `json:"commandName"`      // 指令的名称，如：Speak
+	Target        string            `json:"target,omitempty"` // 指令的目标，如：指令的目标
+	Payload       map[string]string `json:"payload"`          // 指令数据，具体数据格式请参考该指令的模板示例。如：type、text、expectSpeech、needLight、needVoice、wakeupType
 }
